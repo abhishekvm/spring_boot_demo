@@ -1,4 +1,4 @@
-package com.velotio.demo1.config;
+package com.velotio.demo1.services;
 
 import com.velotio.demo1.domains.User;
 import com.velotio.demo1.domains.UserRepository;
@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CustomOpenIdConnectUserService extends OidcUserService {
@@ -26,12 +27,17 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
         String userOrganization = userEmail.split("@")[1];
 
         User user = userRepository.findByEmail(userEmail);
-        if (user == null) {
+
+        if (user != null) {
+            System.out.println("Existing user");
+        } else {
             user = new User();
         }
 
+        System.out.println(user.toString());
+
         user.setEmail(userEmail);
-        user.setName(userName);
+//        user.setName(userName);
         user.setOrganization(userOrganization);
         userRepository.save(user);
 

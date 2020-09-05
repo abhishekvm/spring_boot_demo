@@ -1,5 +1,19 @@
 
 spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo1
+    username: root
+    password: iamagopher
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
   security:
     oauth2:
       client:
@@ -8,4 +22,3 @@ spring:
             clientId: 456213974849-v07kgeh96b32eg4ldp6hk7dmgqdcsu6b.apps.googleusercontent.com
             clientSecret: 5EbFo4BwLdqty4Pq1qXzq8Xn
             redirect-uri: http://localhost:8080/oauth2/callback/google
-

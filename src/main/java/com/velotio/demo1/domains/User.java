@@ -14,6 +14,7 @@ public class User {
   private String name;
   private String email;
   private String organization;
+  private String password;
 
   public User() {}
 
@@ -26,7 +27,7 @@ public class User {
   @Override
   public String toString() {
     return String.format(
-        "Customer[id=%d, name='%s', email='%s']",
+        "User[id=%d, name='%s', email='%s']",
         id, name, email);
   }
 
@@ -60,5 +61,13 @@ public class User {
 
   public void setOrganization(String organization) {
     this.organization = organization;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 }
