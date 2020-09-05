@@ -7,3 +7,5 @@ spring:
           google:
             clientId: 456213974849-v07kgeh96b32eg4ldp6hk7dmgqdcsu6b.apps.googleusercontent.com
             clientSecret: 5EbFo4BwLdqty4Pq1qXzq8Xn
+            redirect-uri: http://localhost:8080/oauth2/callback/google
+
