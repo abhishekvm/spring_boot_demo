@@ -1,5 +1,6 @@
 package com.velotio.demo1.services;
 
+import com.velotio.demo1.domains.RoleRepository;
 import com.velotio.demo1.domains.User;
 import com.velotio.demo1.domains.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,17 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class CustomOpenIdConnectUserService extends OidcUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public OidcUser loadUser(OidcUserRequest userRequest) throws OAuth2AuthenticationException {
@@ -37,7 +41,7 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
         System.out.println(user.toString());
 
         user.setEmail(userEmail);
-//        user.setName(userName);
+        user.setName(userName);
         user.setOrganization(userOrganization);
         userRepository.save(user);
 

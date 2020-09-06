@@ -14,15 +14,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Service(value = "userDetailsService")
+@Service("userDetailsService")
 @Transactional
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+    public CustomUserDetailsService() {
+        super();
+        System.out.println("CustomUserDetailsService created");
+    }
 
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
+        System.out.println("Getting authorities");
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
@@ -54,6 +59,13 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword(), getAuthorities(user.getRoles()));
+                user.getEmail(),
+                user.getPassword(),
+                true,
+                true,
+                true,
+                true,
+                getAuthorities(user.getRoles())
+        );
     }
 }
