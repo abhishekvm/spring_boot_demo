@@ -45,7 +45,10 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
         user.setOrganization(userOrganization);
         userRepository.save(user);
 
-        return oidcUser;
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        customUserDetails.setOidcUser(oidcUser);
+
+        return customUserDetails;
     }
 }
 
