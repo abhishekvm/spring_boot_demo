@@ -1,9 +1,7 @@
 package com.velotio.demo1.domains;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class User {
@@ -15,6 +13,15 @@ public class User {
   private String email;
   private String organization;
   private String password;
+
+  @ManyToMany
+  @JoinTable(
+          name = "users_roles",
+          joinColumns = @JoinColumn(
+                  name = "user_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(
+                  name = "role_id", referencedColumnName = "id"))
+  private Collection<Role> roles;
 
   public User() {}
 
@@ -69,5 +76,13 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public Collection<Role> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Collection<Role> roles) {
+    this.roles = roles;
   }
 }
