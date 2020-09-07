@@ -24,8 +24,10 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 
-	runtimeOnly 'com.h2database:h2'
+	implementation 'io.jsonwebtoken:jjwt:0.5.1'
+
 	runtimeOnly 'mysql:mysql-connector-java'
+
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
