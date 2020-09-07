@@ -1,8 +1,6 @@
 package com.velotio.demo1.services;
 
-import com.velotio.demo1.domains.RoleRepository;
-import com.velotio.demo1.domains.User;
-import com.velotio.demo1.domains.UserRepository;
+import com.velotio.demo1.domains.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,9 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private OrganizationRepository organizationRepository;
+
+    @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
 
     public String signUp(Map<String, String> userInfo) {
@@ -29,8 +30,15 @@ public class UserService {
             user = new User();
         }
 
+        Organization organization = organizationRepository.findByName(userInfo.get("organization"));
+
+        if (organization == null) {
+            organization = new Organization(userInfo.get("organization"));
+            organizationRepository.save(organization);
+        }
+
         user.setEmail(userInfo.get("email"));
-        user.setOrganization(userInfo.get("organization"));
+        user.setOrganization(organization);
         user.setName(userInfo.get("name"));
         user.setRoles(Arrays.asList(roleRepository.findByName(userInfo.get("role"))));
         user.setPassword(bcryptEncoder.encode(userInfo.get("password")));

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,9 +29,22 @@ public class Demo1Application {
 		SpringApplication.run(Demo1Application.class, args);
 	}
 
-	@GetMapping("/hello")
-	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-		return String.format("Hello %s!", name);
+	@GetMapping("/admin")
+	public String admin(Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		return String.format("Hello Admin %s", user.getName());
+	}
+
+	@GetMapping("/developer")
+	public String developer(Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		return String.format("Hello developer", user.getName());
+	}
+
+	@GetMapping("/security")
+	public String security(Principal principal) {
+		User user = userRepository.findByEmail(principal.getName());
+		return String.format("Hello security", user.getName());
 	}
 
 	@GetMapping("/register")

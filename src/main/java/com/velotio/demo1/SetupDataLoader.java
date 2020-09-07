@@ -28,7 +28,8 @@ public class SetupDataLoader implements
             return;
 
         createRoleIfNotFound("ADMIN");
-        createRoleIfNotFound("DEV");
+        createRoleIfNotFound("DEVELOPER");
+        createRoleIfNotFound("SECURITY");
 
         alreadySetup = true;
     }

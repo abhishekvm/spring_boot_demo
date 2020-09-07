@@ -11,8 +11,10 @@ public class User {
   private Long id;
   private String name;
   private String email;
-  private String organization;
   private String password;
+
+  @ManyToOne
+  private Organization organization;
 
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
@@ -25,7 +27,7 @@ public class User {
 
   public User() {}
 
-  public User(String name, String email, String organization) {
+  public User(String name, String email) {
     this.name = name;
     this.email = email;
     this.organization = organization;
@@ -50,7 +52,7 @@ public class User {
     return email;
   }
 
-  public String getOrganization() {
+  public Organization getOrganization() {
     return organization;
   }
 
@@ -66,7 +68,7 @@ public class User {
     this.name = name;
   }
 
-  public void setOrganization(String organization) {
+  public void setOrganization(Organization organization) {
     this.organization = organization;
   }
 
