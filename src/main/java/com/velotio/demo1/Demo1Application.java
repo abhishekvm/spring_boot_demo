@@ -32,19 +32,19 @@ public class Demo1Application {
 	@GetMapping("/admin")
 	public String admin(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
-		return String.format("Hello Admin %s", user.getName());
+		return String.format("Hello admin %s", user.getName());
 	}
 
 	@GetMapping("/developer")
 	public String developer(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
-		return String.format("Hello developer", user.getName());
+		return String.format("Hello developer %s", user.getName());
 	}
 
 	@GetMapping("/security")
 	public String security(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
-		return String.format("Hello security", user.getName());
+		return String.format("Hello security %s", user.getName());
 	}
 
 	@GetMapping("/register")
