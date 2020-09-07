@@ -18,10 +18,9 @@ public class ZapService {
     private static final String API_KEY = "zap_key";
     // The URL of the application to be tested
     private static final String TARGET = "https://public-firing-range.appspot.com";
+    private ClientApi api = new ClientApi(ADDRESS, PORT, API_KEY);
 
     public String scan(String target) {
-        ClientApi api = new ClientApi(ADDRESS, PORT, API_KEY);
-
         try {
             ApiResponse resp = api.spider.scan(target, null, null, null, null);
             String scanID;
@@ -52,6 +51,19 @@ public class ZapService {
             System.out.println("Passive Scan completed");
 
             // Generate Report
+            byte[] report = api.core.htmlreport();
+
+            return generateReport(report);
+        } catch (Exception e) {
+            System.out.println("Exception : " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public String report() {
+        try {
             byte[] report = api.core.htmlreport();
 
             return generateReport(report);

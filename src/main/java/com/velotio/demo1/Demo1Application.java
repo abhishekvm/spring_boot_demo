@@ -58,6 +58,21 @@ public class Demo1Application {
 
 	@GetMapping("/zap_scan")
 	public String zap_scan(HttpServletRequest request) {
+		String url = request.getParameter("url");
+		String email = request.getUserPrincipal().getName();
+		User user = userRepository.findByEmail(email);
+
+		if (url == null) {
+			return "No URL provided to scan";
+		}
+
+		String reportPath = zapService.scan(url);
+
+		return "Generated report at " + reportPath + " by " + user.getName() + " from " + user.getOrganization().toString();
+	}
+
+	@GetMapping("/zap_report")
+	public String zap_report(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 
 		if (!(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer "))) {
@@ -70,14 +85,8 @@ public class Demo1Application {
 			return "Invalid token";
 		}
 
-		String url = request.getParameter("url");
-
-		if (url == null) {
-			return "No URL provided to scan";
-		}
-
 		String subject = tokenService.getSubject(token);
-		String reportPath = zapService.scan(url);
+		String reportPath = zapService.report();
 
 		return "Generated report at " + reportPath + " by " + subject.split("-")[0] + " from " + subject.split("-")[1];
 	}

@@ -48,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin", "/generate").hasAuthority("ADMIN")
+                .antMatchers("/admin", "/generate", "/zap_scan").hasAuthority("ADMIN")
                 .antMatchers("/developer").hasAnyAuthority("DEVELOPER", "ADMIN")
                 .antMatchers("/security").hasAnyAuthority("SECURITY", "ADMIN")
-                .antMatchers("/", "/register", "/zap_scan").permitAll()
+                .antMatchers("/", "/register", "/zap_report").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
