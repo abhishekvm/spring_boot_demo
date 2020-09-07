@@ -4,6 +4,7 @@ import com.velotio.demo1.domains.User;
 import com.velotio.demo1.domains.UserRepository;
 import com.velotio.demo1.services.TokenService;
 import com.velotio.demo1.services.UserService;
+import com.velotio.demo1.services.ZapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,6 +31,9 @@ public class Demo1Application {
 	@Autowired
 	TokenService tokenService;
 
+	@Autowired
+	ZapService zapService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Demo1Application.class, args);
 	}
@@ -52,8 +56,8 @@ public class Demo1Application {
 		return String.format("Hello security %s", user.getName());
 	}
 
-	@GetMapping("/ingest")
-	public String ingest(HttpServletRequest request) {
+	@GetMapping("/zap_scan")
+	public String zap_scan(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 
 		if (!(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer "))) {
@@ -66,9 +70,16 @@ public class Demo1Application {
 			return "Invalid token";
 		}
 
-		String subject = tokenService.getSubject(token);
+		String url = request.getParameter("url");
 
-		return "ingesting by " + subject.split("-")[0] + " from " + subject.split("-")[1];
+		if (url == null) {
+			return "No URL provided to scan";
+		}
+
+		String subject = tokenService.getSubject(token);
+		String reportPath = zapService.scan(url);
+
+		return "Generated report at " + reportPath + " by " + subject.split("-")[0] + " from " + subject.split("-")[1];
 	}
 
 	@GetMapping("/generate")

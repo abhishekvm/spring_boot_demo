@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin", "/generate").hasAuthority("ADMIN")
                 .antMatchers("/developer").hasAnyAuthority("DEVELOPER", "ADMIN")
                 .antMatchers("/security").hasAnyAuthority("SECURITY", "ADMIN")
-                .antMatchers("/", "/register", "/ingest").permitAll()
+                .antMatchers("/", "/register", "/zap_scan").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
