@@ -1,6 +1,7 @@
 
 package com.velotio.demo1.config;
 
+import com.velotio.demo1.filters.TokenAuthorizationFilter;
 import com.velotio.demo1.services.CustomOpenIdConnectUserService;
 import com.velotio.demo1.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -39,6 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
+    public TokenAuthorizationFilter tokenAuthorizationFilter() {
+        return new TokenAuthorizationFilter();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -60,6 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .userInfoEndpoint()
                 .oidcUserService(customOpenIdConnectUserService);
+
+        http.addFilterBefore(tokenAuthorizationFilter(), AnonymousAuthenticationFilter.class);
     }
 }
 

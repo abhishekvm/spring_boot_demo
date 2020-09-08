@@ -14,7 +14,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -93,20 +92,7 @@ public class Demo1Application {
 
 	@GetMapping("/zap_report")
 	public ResponseEntity<String> zap_report(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
-
-		if (!(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer "))) {
-			return new ResponseEntity("Please pass the token", HttpStatus.BAD_REQUEST);
-		}
-
-		String token = bearerToken.substring(7, bearerToken.length());
-		String tokenErr = tokenService.validate(token);
-
-		if (tokenErr != null) {
-			return new ResponseEntity(tokenErr, HttpStatus.FORBIDDEN);
-		}
-
-		String subject = tokenService.getSubject(token);
+		String subject = (String) request.getAttribute("subject");
 		String reportPath = zapService.report();
 		String email = subject.split("-")[0];
 		Organization organization = organizationRepository.getById(Long.parseLong(subject.split("-")[1]));
