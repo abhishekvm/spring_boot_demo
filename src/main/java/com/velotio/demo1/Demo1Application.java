@@ -1,7 +1,10 @@
 package com.velotio.demo1;
 
+import com.velotio.demo1.domains.Organization;
+import com.velotio.demo1.domains.OrganizationRepository;
 import com.velotio.demo1.domains.User;
 import com.velotio.demo1.domains.UserRepository;
+import com.velotio.demo1.services.ActionService;
 import com.velotio.demo1.services.TokenService;
 import com.velotio.demo1.services.UserService;
 import com.velotio.demo1.services.ZapService;
@@ -28,10 +31,16 @@ public class Demo1Application {
 	UserRepository userRepository;
 
 	@Autowired
+	OrganizationRepository organizationRepository;
+
+	@Autowired
 	UserService userService;
 
 	@Autowired
 	TokenService tokenService;
+
+	@Autowired
+	ActionService actionService;
 
 	@Autowired
 	ZapService zapService;
@@ -43,18 +52,24 @@ public class Demo1Application {
 	@GetMapping("/admin")
 	public String admin(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
+		actionService.record("visited admin page", user);
+
 		return String.format("Hello admin %s", user.getName());
 	}
 
 	@GetMapping("/developer")
 	public String developer(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
+		actionService.record("visited developer page", user);
+
 		return String.format("Hello developer %s", user.getName());
 	}
 
 	@GetMapping("/security")
 	public String security(Principal principal) {
 		User user = userRepository.findByEmail(principal.getName());
+		actionService.record("visited security page", user);
+
 		return String.format("Hello security %s", user.getName());
 	}
 
@@ -69,6 +84,7 @@ public class Demo1Application {
 		}
 
 		String reportPath = zapService.scan(url);
+		actionService.record("started a zap scan on " + url, user);
 
 		return "Generated report at " + reportPath + " by " + user.getName() + " from " + user.getOrganization().toString();
 	}
@@ -90,14 +106,29 @@ public class Demo1Application {
 
 		String subject = tokenService.getSubject(token);
 		String reportPath = zapService.report();
-		String response = "Generated report at " + reportPath + " by " + subject.split("-")[0] + " from " + subject.split("-")[1];
+		String email = subject.split("-")[0];
+		Organization organization = organizationRepository.getById(Long.parseLong(subject.split("-")[1]));
+
+		String response = "Generated report at " + reportPath + " by " + email + " from " + organization.getName();
+
+		User user = userRepository.findByEmail(email);
+
+		if (user == null) {
+			actionService.record("generated a zap report", email);
+		} else {
+			actionService.record("generated a zap report", user);
+		}
 
 		return new ResponseEntity(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/generate")
-	public String generate(@RequestParam String email, @RequestParam String organization) {
-		return tokenService.generate(email, organization);
+	public String generate(HttpServletRequest request) {
+		String requestEmail = request.getParameter("email");
+		String email = request.getUserPrincipal().getName();
+		actionService.record("generated a token for " + email, userRepository.findByEmail(email));
+
+		return tokenService.generate(requestEmail);
 	}
 
 	@GetMapping("/register")

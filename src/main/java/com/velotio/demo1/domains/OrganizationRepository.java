@@ -7,4 +7,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource(collectionResourceRel = "organizations", path = "organizations")
 public interface OrganizationRepository extends PagingAndSortingRepository<Organization, Long> {
     Organization findByName(@Param("name") String name);
+    Organization getById(@Param("id") Long id);
 }
