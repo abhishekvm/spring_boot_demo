@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -135,5 +137,14 @@ public class Demo1Application {
 	public RedirectView register(@RequestParam Map<String,String> userInfo) {
 		userService.signUp(userInfo);
 		return new RedirectView("/users");
+	}
+
+	@GetMapping(value = "/history", produces = MediaType.TEXT_HTML_VALUE)
+	@ResponseBody
+	public String history(HttpServletRequest request) {
+		String email = request.getUserPrincipal().getName();
+		User user = userRepository.findByEmail(email);
+
+		return actionService.history(user.getOrganization());
 	}
 }

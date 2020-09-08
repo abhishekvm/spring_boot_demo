@@ -4,6 +4,8 @@ import com.velotio.demo1.domains.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ActionService {
 
@@ -29,5 +31,19 @@ public class ActionService {
         action.setOrganization(user.getOrganization());
 
         actionRepository.save(action);
+    }
+
+    public String history(Organization organization) {
+        String histroy = "<html>\n" + "<header><title>History</title></header>\n" +
+                "<body><table style=\"width:100%\"><tr><th>Actions</th></tr>\n";
+
+        List<Action> actions = actionRepository.findByOrganization(organization);
+        for (Action action: actions) {
+            histroy += "<tr><td>" + action.getDescription() + "</tr></td>";
+        }
+
+        histroy += "</table></body>\n" + "</html>";
+
+        return histroy;
     }
 }

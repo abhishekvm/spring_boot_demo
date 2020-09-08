@@ -47,4 +47,16 @@ public class Action {
     public void setOrganization(Organization organization) {
         this.organization = organization;
     }
+
+    public String getDescription() {
+        String description;
+
+        if (user == null) {
+            description = "Anonymous user with email " + userEmail + " performed action: " + name;
+        } else {
+            description = user.getName() + " performed action: " + name;
+        }
+
+        return description;
+    }
 }
