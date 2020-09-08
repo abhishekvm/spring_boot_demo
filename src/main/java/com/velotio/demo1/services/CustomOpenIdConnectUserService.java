@@ -2,6 +2,8 @@ package com.velotio.demo1.services;
 
 import com.velotio.demo1.domains.User;
 import com.velotio.demo1.domains.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 @Service
 public class CustomOpenIdConnectUserService extends OidcUserService {
+
+    Logger logger = LoggerFactory.getLogger(CustomOpenIdConnectUserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -27,7 +31,7 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
         User user = userRepository.findByEmail(userEmail);
 
         if (user != null) {
-            System.out.println("Existing user");
+            logger.info("Existing user");
         } else {
             user = new User();
         }

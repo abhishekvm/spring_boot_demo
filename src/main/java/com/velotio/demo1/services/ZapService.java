@@ -1,5 +1,7 @@
 package com.velotio.demo1.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.zaproxy.clientapi.core.ApiResponse;
 import org.zaproxy.clientapi.core.ApiResponseElement;
@@ -20,6 +22,8 @@ public class ZapService {
     private static final String TARGET = "https://public-firing-range.appspot.com";
     private ClientApi api = new ClientApi(ADDRESS, PORT, API_KEY);
 
+    Logger logger = LoggerFactory.getLogger(ZapService.class);
+
     public String scan(String target) {
         try {
             ApiResponse resp = api.spider.scan(target, null, null, null, null);
@@ -31,31 +35,31 @@ public class ZapService {
             while (true) {
                 Thread.sleep(1000);
                 progress = Integer.parseInt(((ApiResponseElement) api.spider.status(scanID)).getValue());
-                System.out.println("Spider progress : " + progress + "%");
+                logger.debug("Spider progress : " + progress + "%");
                 if (progress >= 100) {
                     break;
                 }
             }
-            System.out.println("Spider completed");
+            logger.debug("Spider completed");
 
             // Passive scan
             while (true) {
                 Thread.sleep(2000);
                 api.pscan.recordsToScan();
                 numberOfRecords = Integer.parseInt(((ApiResponseElement) api.pscan.recordsToScan()).getValue());
-                System.out.println("Number of records left for scanning : " + numberOfRecords);
+                logger.debug("Number of records left for scanning : " + numberOfRecords);
                 if (numberOfRecords == 0) {
                     break;
                 }
             }
-            System.out.println("Passive Scan completed");
+            logger.debug("Passive Scan completed");
 
             // Generate Report
             byte[] report = api.core.htmlreport();
 
             return generateReport(report);
         } catch (Exception e) {
-            System.out.println("Exception : " + e.getMessage());
+            logger.error("Exception : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -68,7 +72,7 @@ public class ZapService {
 
             return generateReport(report);
         } catch (Exception e) {
-            System.out.println("Exception : " + e.getMessage());
+            logger.error("Exception : " + e.getMessage());
             e.printStackTrace();
         }
 

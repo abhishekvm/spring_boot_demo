@@ -8,6 +8,8 @@ import com.velotio.demo1.services.ZapService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -72,23 +74,25 @@ public class Demo1Application {
 	}
 
 	@GetMapping("/zap_report")
-	public String zap_report(HttpServletRequest request) {
+	public ResponseEntity<String> zap_report(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
 
 		if (!(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer "))) {
-			return "Please pass the token";
+			return new ResponseEntity("Please pass the token", HttpStatus.BAD_REQUEST);
 		}
 
 		String token = bearerToken.substring(7, bearerToken.length());
+		String tokenErr = tokenService.validate(token);
 
-		if (!tokenService.validate(token)) {
-			return "Invalid token";
+		if (tokenErr != null) {
+			return new ResponseEntity(tokenErr, HttpStatus.FORBIDDEN);
 		}
 
 		String subject = tokenService.getSubject(token);
 		String reportPath = zapService.report();
+		String response = "Generated report at " + reportPath + " by " + subject.split("-")[0] + " from " + subject.split("-")[1];
 
-		return "Generated report at " + reportPath + " by " + subject.split("-")[0] + " from " + subject.split("-")[1];
+		return new ResponseEntity(response, HttpStatus.OK);
 	}
 
 	@GetMapping("/generate")

@@ -43,7 +43,7 @@ public class SetupDataLoader implements
 
         Organization organization = createOrganizationIfNotFound("velotio.com");
 
-        createUser("siddharth.shishulkar@velotio.com", "Sid", "1212", organization, Arrays.asList(admin));
+        createUser("siddharth.shishulkar@velotio.com", "Sid", "1212", organization, Arrays.asList(developer));
 
         alreadySetup = true;
     }
