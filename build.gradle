@@ -15,19 +15,24 @@ repositories {
 dependencies {
 	compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 
+	// Spring base
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 
+	// Spring Security
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	implementation 'org.springframework.security:spring-security-oauth2-jose'
 	implementation 'org.springframework.security:spring-security-oauth2-client'
 
+	// JWT
 	implementation 'io.jsonwebtoken:jjwt:0.5.1'
 
+	// ZAP client
 	implementation 'org.zaproxy:zap-clientapi:1.8.0'
 
+	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

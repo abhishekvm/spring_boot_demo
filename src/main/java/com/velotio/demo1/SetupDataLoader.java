@@ -8,13 +8,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 
 @Component
-public class SetupDataLoader implements
-        ApplicationListener<ContextRefreshedEvent> {
+public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     boolean alreadySetup = false;
 
@@ -43,7 +41,8 @@ public class SetupDataLoader implements
 
         Organization organization = createOrganizationIfNotFound("velotio.com");
 
-        createUser("siddharth.shishulkar@velotio.com", "Sid", "1212", organization, Arrays.asList(admin));
+        createUser("chirag.jog@velotio.com", "Chirag Jog", "1212", organization, Collections.singletonList(security));
+        createUser("kalpak.shah@velotio.com", "Kalpak Shah", "1212", organization, Collections.singletonList(admin));
 
         alreadySetup = true;
     }

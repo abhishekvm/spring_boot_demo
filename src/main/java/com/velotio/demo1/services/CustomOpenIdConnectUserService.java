@@ -30,17 +30,7 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
 
         User user = userRepository.findByEmail(userEmail);
 
-        if (user != null) {
-            logger.info("Existing user");
-        } else {
-            user = new User();
-        }
-
-        System.out.println(user.toString());
-
-        user.setEmail(userEmail);
-        user.setName(userName);
-        userRepository.save(user);
+        logger.info(user.toString());
 
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
         customUserDetails.setOidcUser(oidcUser);
@@ -48,4 +38,3 @@ public class CustomOpenIdConnectUserService extends OidcUserService {
         return customUserDetails;
     }
 }
-

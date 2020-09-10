@@ -111,12 +111,28 @@ public class Demo1Application {
 	}
 
 	@GetMapping("/generate")
-	public String generate(HttpServletRequest request) {
+	public ResponseEntity<String> generate(HttpServletRequest request) {
 		String requestEmail = request.getParameter("email");
 		String email = request.getUserPrincipal().getName();
-		actionService.record("generated a token for " + email, userRepository.findByEmail(email));
 
-		return tokenService.generate(requestEmail);
+		if (!requestEmail.split("@")[1].equals(email.split("@")[1])) {
+		    return new ResponseEntity<String>("email does not belong to this organization", HttpStatus.UNAUTHORIZED);
+        }
+
+		User adminUser = userRepository.findByEmail(email);
+		User user = userRepository.findByEmail(requestEmail);
+
+		String actionName;
+
+		if (user == null) {
+			actionName = "generated a token for " + requestEmail;
+		} else {
+            actionName = "generated a token for " + user.getName();;
+		}
+
+        actionService.record(actionName, adminUser);
+
+        return new ResponseEntity<String>(tokenService.generate(requestEmail), HttpStatus.UNAUTHORIZED);
 	}
 
 	@GetMapping("/register")
