@@ -39,11 +39,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role developer = createRoleIfNotFound("DEVELOPER");
         Role security = createRoleIfNotFound("SECURITY");
 
-        Organization organization = createOrganizationIfNotFound("velotio.com");
-
-        createUser("chirag.jog@velotio.com", "Chirag Jog", "1212", organization, Collections.singletonList(security));
-        createUser("kalpak.shah@velotio.com", "Kalpak Shah", "1212", organization, Collections.singletonList(admin));
-
         alreadySetup = true;
     }
 
