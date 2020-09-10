@@ -3,6 +3,7 @@
 This app showcases various abilities of spring security and oauth.
 
 ## Perquisites
+ - Add `client-id` and `client-secret` in the application.yml file for the Google app used for Oauth.
  - A MySQL server running on default ports with a database named `demo1`.
  - A running ZAP server running on port `8081` with api_key setup as `zap_key`.
  
